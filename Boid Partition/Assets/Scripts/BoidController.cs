@@ -9,7 +9,6 @@ namespace SpatialPartitionPattern
     {
         public TextMeshProUGUI text;
         public bool seekMode = false;
-        public LayerMask layerMask;
 
         public GameObject boidObj;
         public Transform boidParent;
@@ -32,7 +31,7 @@ namespace SpatialPartitionPattern
                 Vector3 randomPos = new Vector3(Random.Range(0f, mapWidth), Random.Range(0f, mapWidth), Random.Range(0f, mapWidth));
                 GameObject newBoid = Instantiate(boidObj, randomPos, Quaternion.identity);
                 newBoid.transform.parent = boidParent;
-                boids.Add(new Boid(newBoid, mapWidth, grid, layerMask));
+                boids.Add(new Boid(newBoid, mapWidth, grid));
             }
         }
         private void Update()

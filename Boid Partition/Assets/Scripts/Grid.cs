@@ -47,7 +47,6 @@ namespace SpatialPartitionPattern
             Vector3 alignmentDirection = Vector3.zero;
             int alignmentCount = 0;
             Vector3 cohesionDirection = Vector3.zero;
-            Vector3 boundsDir = Vector3.zero;
             int cohesionCount = 0;
 
             Boid currentBoid = cells[cellX, cellY, cellZ];
@@ -83,17 +82,9 @@ namespace SpatialPartitionPattern
 
             seperationDirection = -seperationDirection.normalized;
 
-            if (Physics.Raycast(boid.boidTrans.position, boid.boidTrans.forward, out RaycastHit hitInfo, boid.LocalAreaRadius, boid.layerMask))
-                boundsDir = -(hitInfo.point - boid.boidTrans.position).normalized * 10;
-
-            if (boundsDir == Vector3.zero)
-            {
-                boid.steering = seperationDirection.normalized * 0.5f;
-                boid.steering += alignmentDirection.normalized * 0.34f;
-                boid.steering += cohesionDirection.normalized * 0.16f;
-            }
-            else
-                boid.steering = boundsDir;
+            boid.steering = seperationDirection.normalized * 0.5f;
+            boid.steering += alignmentDirection.normalized * 0.34f;
+            boid.steering += cohesionDirection.normalized * 0.16f;
 
             if (oldCellX == cellX && oldCellY == cellY && oldCellZ == cellZ)
             {

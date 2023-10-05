@@ -19,13 +19,11 @@ namespace SpatialPartitionPattern
         public Boid prevBoid;
         public Vector3 steering;
         public Vector3 oldPos;
-        public LayerMask layerMask;
-        public Boid(GameObject oidObj, float mapWidth, Grid grid, LayerMask layerMask)
+        public Boid(GameObject oidObj, float mapWidth, Grid grid)
         {
             this.boidTrans = oidObj.transform;
             this.grid = grid;
             this.mapWidth = mapWidth;
-            this.layerMask = layerMask;
             grid.Add(this);
         }
 
@@ -74,7 +72,6 @@ namespace SpatialPartitionPattern
             Vector3 alignmentDirection = Vector3.zero;
             int alignmentCount = 0;
             Vector3 cohesionDirection = Vector3.zero;
-            Vector3 boundsDir = Vector3.zero;
             int cohesionCount = 0;
 
             foreach (Boid b in boids)
@@ -104,19 +101,9 @@ namespace SpatialPartitionPattern
 
             seperationDirection = -seperationDirection.normalized;
 
-            if (Physics.Raycast(boidTrans.position, boidTrans.forward, out RaycastHit hitInfo, LocalAreaRadius, layerMask))
-            {
-                boundsDir = -(hitInfo.point - boidTrans.position).normalized * 10;
-            }
-
-            if (boundsDir == Vector3.zero)
-            {
-                steering = seperationDirection.normalized * 0.5f;
-                steering += alignmentDirection.normalized * 0.34f;
-                steering += cohesionDirection.normalized * 0.16f;
-            }
-            else
-                steering = boundsDir;
+            steering = seperationDirection.normalized * 0.5f;
+            steering += alignmentDirection.normalized * 0.34f;
+            steering += cohesionDirection.normalized * 0.16f;
         }
 
         void GetNewRandomPos()
