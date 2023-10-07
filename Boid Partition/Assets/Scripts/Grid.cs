@@ -7,6 +7,7 @@ namespace SpatialPartitionPattern
     public class Grid
     {
         int cellSize;
+        int numberOfCells;
         float halfMapWidth;
 
         Boid[,,] cells;
@@ -15,7 +16,7 @@ namespace SpatialPartitionPattern
         {
             this.cellSize = cellSize;
             this.halfMapWidth = mapWidth / 2;
-            int numberOfCells = mapWidth / cellSize;
+            this.numberOfCells = mapWidth / cellSize;
             cells = new Boid[numberOfCells, numberOfCells, numberOfCells];
         }
         public void Add(Boid boid)
@@ -49,33 +50,45 @@ namespace SpatialPartitionPattern
             Vector3 cohesionDirection = Vector3.zero;
             int cohesionCount = 0;
 
-            Boid currentBoid = cells[cellX, cellY, cellZ];
-
-            while (currentBoid != null)
+            List<Boid> nearbyCells = new List<Boid>();
+            nearbyCells.Add(cells[cellX, cellY, cellZ]);
+            if (cellX > 0 && cells[cellX - 1, cellY, cellZ] != null) nearbyCells.Add(cells[cellX - 1,cellY,cellZ]);
+            if (cellX < numberOfCells - 1 && cells[cellX + 1, cellY, cellZ] != null) nearbyCells.Add(cells[cellX + 1,cellY,cellZ]);
+            if (cellY > 0 && cells[cellX, cellY - 1, cellZ] != null) nearbyCells.Add(cells[cellX,cellY - 1,cellZ]);
+            if (cellY < numberOfCells - 1 && cells[cellX, cellY + 1, cellZ] != null) nearbyCells.Add(cells[cellX,cellY + 1,cellZ]);
+            if (cellZ > 0 && cells[cellX, cellY, cellZ - 1] != null) nearbyCells.Add(cells[cellX, cellY, cellZ - 1]);
+            if (cellZ < numberOfCells - 1 && cells[cellX, cellY, cellZ + 1] != null) nearbyCells.Add(cells[cellX, cellY, cellZ + 1]);
+            foreach (Boid nearby in nearbyCells)
             {
-                if (currentBoid == boid) {
+                Boid currentBoid = nearby;
+
+                while (currentBoid != null)
+                {
+                    if (currentBoid == boid)
+                    {
+                        currentBoid = currentBoid.nextBoid;
+                        continue;
+                    }
+
+                    float distance = Vector3.Distance(currentBoid.boidTrans.position, boid.boidTrans.position);
+
+                    if (distance < boid.NoClumpingRadius)
+                    {
+                        seperationDirection += currentBoid.boidTrans.position - boid.boidTrans.position;
+                        seperationCount++;
+                    }
+                    if (distance < boid.LocalAreaRadius)
+                    {
+                        alignmentDirection += currentBoid.boidTrans.forward;
+                        alignmentCount++;
+                    }
+                    if (distance < boid.LocalAreaRadius)
+                    {
+                        cohesionDirection += currentBoid.boidTrans.position - boid.boidTrans.position;
+                        cohesionCount++;
+                    }
                     currentBoid = currentBoid.nextBoid;
-                    continue;
                 }
-
-                float distance = Vector3.Distance(currentBoid.boidTrans.position, boid.boidTrans.position);
-
-                if (distance < boid.NoClumpingRadius)
-                {
-                    seperationDirection += currentBoid.boidTrans.position - boid.boidTrans.position;
-                    seperationCount++;
-                }
-                if (distance < boid.LocalAreaRadius)
-                {
-                    alignmentDirection += currentBoid.boidTrans.forward;
-                    alignmentCount++;
-                }
-                if (distance < boid.LocalAreaRadius)
-                {
-                    cohesionDirection += currentBoid.boidTrans.position - boid.boidTrans.position;
-                    cohesionCount++;
-                }
-                currentBoid = currentBoid.nextBoid;
             }
 
             if (seperationCount > 0) seperationDirection /= seperationCount;

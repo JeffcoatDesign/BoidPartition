@@ -245,8 +245,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 277904484}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25, y: 0, z: 25}
-  m_LocalScale: {x: 5, y: 1, z: 5}
+  m_LocalPosition: {x: 40, y: 0, z: 40}
+  m_LocalScale: {x: 8, y: 1, z: 8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -266,9 +266,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   text: {fileID: 2130814441}
   seekMode: 0
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 8
   boidObj: {fileID: 8345301032070701171, guid: e33b0eae51dd07549a2cff8003dd4c2a, type: 3}
   boidParent: {fileID: 901968600}
   mapWidth: 80
@@ -552,7 +549,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 65
+  field of view: 60
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -578,7 +575,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0.11419288, y: 0.37974897, z: -0.04730024, w: 0.9167952}
-  m_LocalPosition: {x: -15, y: 45, z: -15}
+  m_LocalPosition: {x: -20, y: 52.02, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
